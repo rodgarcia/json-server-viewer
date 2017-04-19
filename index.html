@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>JSON Server Viewer</title>
+
+    <link rel="stylesheet" href="node_modules/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="node_modules/codemirror/theme/midnight.css">
+    <link rel="stylesheet" href="styles.css">
+
+    <script src="node_modules/codemirror/lib/codemirror.js"></script>
+    <script src="node_modules/codemirror/mode/javascript/javascript.js"></script>
+</head>
+
+<body>
+    <div class="viewer"></div>
+
+    <script>
+        const ipcRenderer = require("electron").ipcRenderer;
+
+        var myCodeMirror = CodeMirror(document.querySelector('.viewer'), {
+            value: "",
+            mode: "javascript",
+            theme: "midnight",
+            readOnly: true
+        });
+        
+        ipcRenderer.send("ready");
+
+        ipcRenderer.on("fileModified", (e, data) => myCodeMirror.getDoc().setValue(data));
+    </script>
+</body>
+
+</html>
